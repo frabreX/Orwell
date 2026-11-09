@@ -1,6 +1,6 @@
 import numpy as np
 import json
-import os
+from pathlib import Path
 
 def sigmoid(Z):
     Sigma = 1 / (1 + np.exp(-Z))
@@ -12,12 +12,13 @@ def loss(Sigma_o, y_true):
 
 
 #Saving the weights
-path = "weights.json"
+path = Path(__file__).with_name("weights.json")
+checkpoint = path if path.exists() else path.with_name("baseline_weights.json")
 
-if os.path.exists(path):
+if checkpoint.exists():
     print("Weights have already been generated")
 
-    with open(path, "r") as f:
+    with checkpoint.open(encoding="utf-8") as f:
         arrays = json.load(f)
         W1 = np.array(arrays["W1"])
         W2 = np.array(arrays["W2"])
